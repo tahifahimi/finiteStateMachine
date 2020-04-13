@@ -12,9 +12,9 @@ public class DFA_Machine {
     private State start_state ;
 
     //read the file and generate the states and edges
-    public DFA_Machine() {
+    public DFA_Machine(String filePath) {
         try {
-        File file = new File("file path");
+        File file = new File(filePath);
         BufferedReader br = new BufferedReader(new FileReader(file));
 
         //read the alphabet
@@ -69,16 +69,18 @@ public class DFA_Machine {
         drawTheDFA();
 
         }catch(Exception e) {
-            System.out.println(e.getStackTrace());
+            e.printStackTrace();
         }
     }
 
     //print the DFA (states and edges)
     private void drawTheDFA() {
+        System.out.println("the machine works fine");
     }
 
     //check the entered statements
     public void checkStatement(){
+        System.out.println("enter the statement");
         Scanner scanner = new Scanner(System.in);
         String order = scanner.nextLine();
         while (order!="\n"){
@@ -104,21 +106,28 @@ public class DFA_Machine {
             if (nextState!=""){
                 // find the next state and assign it to current state
                 for (int k=0;k<states.size();k++){
-                    if (((State)states.get(k)).name ==nextState ){
+                    if (nextState.equals(((State)states.get(k)).name) ){
                         current = (State) states.get(k);
+                        System.out.println("the current state changes to "+current.name);
                         break;
                     }
                 }
             }else {
                 // no next state is found!
                 ///Do sth!??????????????????????????
-                System.out.println("the next state is not sounded!");
+                System.out.println("the next state is not founded!");
             }
         }
 
         //check current state is in the final state or not!
+        System.out.println("the final states are : ");
+        for (int i=0;i<final_states.size();i++){
+            System.out.println(final_states.get(i));
+        }
+        System.out.println("the current state is ");
+        System.out.println(current.name);
         for (int j=0;j<final_states.size();j++){
-            if (current.name == ((State)final_states.get(j)).name ){
+            if (current.name.equals(final_states.get(j))){
                 System.out.println("the sentence is accepted!");
                 //add some more information
                 return;
@@ -129,11 +138,16 @@ public class DFA_Machine {
 
     private boolean checkTheLetters(String statement){
         String[] alpha = statement.split("(?!^)");
-        boolean flag =false;
+//        for (int m =0;m<alpha.length;m++){
+//            System.out.println(alpha[m]);
+//        }
+        boolean flag ;
         for (int i=0;i<alpha.length;i++){
+            flag =false;
             for(int j=0;j<alphabet.size();j++){
-                if (alpha[i] == alphabet.get(j)){
+                if (alpha[i].equals(alphabet.get(j))){
                     flag = true;
+                    System.out.println(alpha[i]);
                     break;
                 }
             }
