@@ -10,7 +10,7 @@ public class DFA_Machine {
     private ArrayList alphabet = new ArrayList<String>();
     private ArrayList states = new ArrayList<State>();
     private ArrayList final_states = new ArrayList<String>();
-    private String start_state ;
+    private State start_state ;
 
     //read the file and generate the states and edges
     public DFA_Machine() {
@@ -38,7 +38,7 @@ public class DFA_Machine {
             State current = (State) states.get(i);
             if(current.name.equals(st)){
                 //find the start state
-                start_state = st;
+                start_state = current;
             }
         }
 
@@ -96,9 +96,36 @@ public class DFA_Machine {
 
     //check if the statement is acceptable in our DFA or not
     private void checkSentence(String order) {
+        State current = start_state;
+        String[] actions = order.split("(?!^)");
 
-        //print accpted if it was acceptable
+        //iterate over the sentence
+        for (int i=0;i<actions.length;i++){
+            String nextState = current.moveToNextState(actions[i]);
+            if (nextState!=""){
+                // find the next state and assign it to current state
+                for (int k=0;k<states.size();k++){
+                    if (((State)states.get(k)).name ==nextState ){
+                        current = (State) states.get(k);
+                        break;
+                    }
+                }
+            }else {
+                // no next state is found!
+                ///Do sth!??????????????????????????
+                System.out.println("the next state is not sounded!");
+            }
+        }
 
+        //check current state is in the final state or not!
+        for (int j=0;j<final_states.size();j++){
+            if (current.name == ((State)final_states.get(j)).name ){
+                System.out.println("the sentence is accepted!");
+                //add some more information
+                return;
+            }
+        }
+        System.out.println("the sentence is not accepted!");
     }
 
     private boolean checkTheLetters(String statement){

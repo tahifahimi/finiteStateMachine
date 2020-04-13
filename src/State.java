@@ -7,4 +7,8 @@ public class State {
     public void addEdge(String alpha,String destination){
 
     }
+
+    public String moveToNextState(String action){
+        return "";
+    }
 }
