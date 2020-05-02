@@ -4,7 +4,8 @@ public class State {
 
     //save the name of the state (name of the state is identical)
     public String name;
-    private ArrayList edges;
+    //edges of a state save where we can go from this state
+    public ArrayList edges;
 
     public State(String name) {
         this.name = name;
@@ -24,5 +25,10 @@ public class State {
             }
         }
         return "";
+    }
+
+    //pass number of the edges
+    public int getEdges(){
+        return edges.size();
     }
 }
