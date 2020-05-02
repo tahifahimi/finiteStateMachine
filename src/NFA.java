@@ -1,6 +1,4 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 import java.util.ArrayList;
 
 public class NFA {
@@ -102,6 +100,7 @@ public class NFA {
             //find the not added alphabet for this state
             boolean founded = false;
             for (int i=0;i<alphabet.size();i++){
+                founded = false;
                 for (int j=0;j<n2dStates.get(index).edges.size();j++){
                     if (alphabet.get(i).equals(n2dStates.get(index).edges.get(j))){
                         founded = true;
@@ -119,6 +118,10 @@ public class NFA {
             //         2-calculate the accessible states and save them in accessible state
             String names[] = n2dStates.get(index).name.split(",");
             ArrayList<String> accessible = new ArrayList<String>();
+
+            // save the accessible states with landa value and search in them recursively
+            ArrayList<String> landaStates = new ArrayList<>();
+
             //search in each name of states names
             for (int i=0;i<names.length;i++){
                 // search for accessible states from each state
@@ -128,16 +131,53 @@ public class NFA {
                         for (int e = 0; e < states.get(j).getEdges(); e++) {
                             if (((Edge) (states.get(j).edges.get(e))).value.equals(alpha)) {
                                 // add next states to accessible states
-                                accessible.add(((Edge) states.get(i).edges.get(e)).otherSideOfEdge);
+                                accessible.add(((Edge) states.get(j).edges.get(e)).otherSideOfEdge);
 
                             } else if (((Edge) (states.get(j).edges.get(e))).value.equals("λ")) {
                                 // we can move with landa
                                 // we can have thousands of landa after each other!
+                                landaStates.add(((Edge) states.get(j).edges.get(e)).otherSideOfEdge);
                             }
                         }
                     }
                 }
             }
+            //search recursively in the landaStates and add them to the accessible list
+            ArrayList<String > temp = new ArrayList<>();
+            boolean finished = false;
+//            boolean delete = false;
+            while(!finished){
+                for (String lan : landaStates){
+                    for(State s : states){
+                        if (s.name.equals(lan)){
+                            // search for destination
+                            for (int e = 0; e < s.getEdges(); e++) {
+                                if (((Edge) (s.edges.get(e))).value.equals(alpha)) {
+                                    // add next states to accessible states
+                                    temp.add(((Edge) s.edges.get(e)).otherSideOfEdge);
+//                                    landaStates.remove(lan);
+//                                    delete = true;
+                                } else if (((Edge) (s.edges.get(e))).value.equals("λ")) {
+                                    // we can move with landa
+                                    // we can have thousands of landa after each other!
+                                    temp.add(((Edge) s.edges.get(e)).otherSideOfEdge);
+                                }
+                            }
+                            //if there is still lan in landaState, removes that
+//                            if (delete){
+//                                landaStates.remove(lan);
+//                                delete = false;
+//                            }
+                        }
+                    }
+                }
+                // add temp data to the landaState array
+                landaStates = temp;
+                temp = new ArrayList<>();
+                if (landaStates.size()==0)
+                    finished = true;
+            }
+
             // part 2c: now the accessible states are founded...
             //          1-add them together
             //          2-and check if there is any state with that name  in n2dstates or not!
@@ -157,6 +197,7 @@ public class NFA {
 
             // add founded edge to the state
             n2dStates.get(index).addEdge(alpha,foundedState);
+            numberOfEdges++;
         }
 
         // part 3: assign the final_states
@@ -181,5 +222,31 @@ public class NFA {
             }
         }
 
+        //write data into a file
+        try (PrintWriter out = new PrintWriter(fileName)) {
+            for (String alpha : alphabet )
+                System.out.printf("%s ",alpha);
+            System.out.println();
+
+            for (State s:  n2dStates)
+                System.out.printf("%s ",s.name);
+            System.out.println();
+
+            System.out.printf("%s\n",n2dStart.name);
+
+            for (String s:  n2d_final_states)
+                System.out.printf("%s ",s);
+            System.out.println();
+
+            for (State s:  n2dStates){
+                for (Object e: s.edges)
+                System.out.printf("%s  %s %s\n",s.name,((Edge)e).value,((Edge)e).otherSideOfEdge);
+            }
+
+            out.println();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
+
 }

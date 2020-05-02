@@ -6,6 +6,6 @@ public class Main {
 //        new DFA_Machine("D:\\study\\theoryOfAutamata\\DFA\\src\\DFA_Input_1.txt").checkStatement();
 
         // create a NFA machine and change the NFA to DFA machine
-        new NFA("D:\\study\\theoryOfAutamata\\DFA\\src\\NFA_Input_2.txt");
+        new NFA("D:\\study\\theoryOfAutamata\\DFA\\src\\NFA_Input_2.txt").NFA2DFA("check.txt");
     }
 }
