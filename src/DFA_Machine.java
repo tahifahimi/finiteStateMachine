@@ -65,7 +65,6 @@ public class DFA_Machine {
                 }
             }
         }
-
         drawTheDFA();
 
         }catch(Exception e) {
@@ -118,7 +117,6 @@ public class DFA_Machine {
                 System.out.println("the next state is not founded!");
             }
         }
-
         //check current state is in the final state or not!
         System.out.println("the final states are : ");
         for (int i=0;i<final_states.size();i++){
@@ -136,6 +134,7 @@ public class DFA_Machine {
         System.out.println("the sentence is not accepted!");
     }
 
+    // check if the letters of the input string is in our alphabets or not!
     private boolean checkTheLetters(String statement){
         String[] alpha = statement.split("(?!^)");
 //        for (int m =0;m<alpha.length;m++){
