@@ -210,8 +210,6 @@ public class NFA {
                     finished = true;
             }
 
-
-
             // part 2c: now the accessible states are founded...
             //          1-add them together and remove the repetitive state
             //          2-and check if there is any state with that name  in n2dstates or not!
@@ -264,32 +262,32 @@ public class NFA {
             }
         }
 
-        drawNFA(n2dStates, alphabet);
-        //write data into a file
-        try (PrintWriter out = new PrintWriter(fileName)) {
-            for (String alpha : alphabet )
-                System.out.printf("%s ",alpha);
-            System.out.println();
-
-            for (State s:  n2dStates)
-                System.out.printf("%s ",s.name);
-            System.out.println();
-
-            System.out.printf("%s\n",n2dStart.name);
-
-            for (String s:  n2d_final_states)
-                System.out.printf("%s ",s);
-            System.out.println();
-
-            for (State s:  n2dStates){
-                for (Object e: s.edges)
-                System.out.printf("%s  %s %s\n",s.name,((Edge)e).value,((Edge)e).otherSideOfEdge);
-            }
-
-            out.println();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+//        drawNFA(n2dStates, alphabet);
+//        //write data into a file
+//        try (PrintWriter out = new PrintWriter(fileName)) {
+//            for (String alpha : alphabet )
+//                System.out.printf("%s ",alpha);
+//            System.out.println();
+//
+//            for (State s:  n2dStates)
+//                System.out.printf("%s ",s.name);
+//            System.out.println();
+//
+//            System.out.printf("%s\n",n2dStart.name);
+//
+//            for (String s:  n2d_final_states)
+//                System.out.printf("%s ",s);
+//            System.out.println();
+//
+//            for (State s:  n2dStates){
+//                for (Object e: s.edges)
+//                System.out.printf("%s  %s %s\n",s.name,((Edge)e).value,((Edge)e).otherSideOfEdge);
+//            }
+//
+//            out.println();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
     }
 
     //check if the otherside have the landa edge return true
