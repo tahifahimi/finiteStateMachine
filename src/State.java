@@ -5,11 +5,11 @@ public class State {
     //save the name of the state (name of the state is identical)
     public String name;
     //edges of a state save where we can go from this state
-    public ArrayList edges;
+    public ArrayList<Edge> edges;
 
     public State(String name) {
         this.name = name;
-        this.edges = new ArrayList<Edge>();
+        this.edges = new ArrayList<>();
     }
 
     // add new edge to the array of this State'edge!
@@ -20,8 +20,8 @@ public class State {
     // pass the next state
     public String moveToNextState(String action){
         for(int i=0;i<edges.size();i++){
-            if (action.equals(((Edge)edges.get(i)).value)){
-                return ((Edge)edges.get(i)).otherSideOfEdge;
+            if (action.equals(edges.get(i).value)){
+                return edges.get(i).otherSideOfEdge;
             }
         }
         return "";

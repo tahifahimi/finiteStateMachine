@@ -106,8 +106,8 @@ public class NFA {
             for (int i=0;i<alphabet.size();i++){
                 founded = false;
                 for (int j=0;j<n2dStates.get(index).edges.size();j++){
-                    if (alphabet.get(i).equals(((Edge)n2dStates.get(index).edges.get(j)).value)){
-                        System.out.println("alpha "+alphabet.get(i)+"   "+((Edge)n2dStates.get(index).edges.get(j)).value);
+                    if (alphabet.get(i).equals(n2dStates.get(index).edges.get(j).value)){
+                        System.out.println("alpha "+alphabet.get(i)+"   "+n2dStates.get(index).edges.get(j).value);
                         founded = true;
                     }
                 }
@@ -138,21 +138,21 @@ public class NFA {
                     if (states.get(j).name.equals(names[i])) {
                         //search in edges
                         for (int e = 0; e < states.get(j).getEdges(); e++) {
-                            if (((Edge) (states.get(j).edges.get(e))).value.equals(alpha)) {
+                            if (states.get(j).edges.get(e).value.equals(alpha)) {
                                 // add next states to accessible states
-                                accessible.add(((Edge) states.get(j).edges.get(e)).otherSideOfEdge);
+                                accessible.add( states.get(j).edges.get(e).otherSideOfEdge);
                                 // check if the othersideofEdge have landa edge it should added to the landaState
-                                if (haveLandaEdge(((Edge) states.get(j).edges.get(e)).otherSideOfEdge)){
+                                if (haveLandaEdge(states.get(j).edges.get(e).otherSideOfEdge)){
 //                                    System.out.println("there is landa edge in : "+((Edge) states.get(j).edges.get(e)).otherSideOfEdge);
-                                    seenAlpha.add(((Edge) states.get(j).edges.get(e)).otherSideOfEdge);
+                                    seenAlpha.add(states.get(j).edges.get(e).otherSideOfEdge);
                                 }
-                                System.out.println("from alpha is : "+((Edge) states.get(j).edges.get(e)).otherSideOfEdge);
+                                System.out.println("from alpha is : "+states.get(j).edges.get(e).otherSideOfEdge);
 
-                            } else if (((Edge) (states.get(j).edges.get(e))).value.equals("λ")) {
+                            } else if (states.get(j).edges.get(e).value.equals("λ")) {
                                 // we can move with landa
                                 // we can have thousands of landa after each other!
-                                landaStates.add(((Edge) states.get(j).edges.get(e)).otherSideOfEdge);
-                                System.out.println("from landa is : "+((Edge) states.get(j).edges.get(e)).otherSideOfEdge);
+                                landaStates.add(states.get(j).edges.get(e).otherSideOfEdge);
+                                System.out.println("from landa is : "+states.get(j).edges.get(e).otherSideOfEdge);
 
                             }
                         }
@@ -166,21 +166,18 @@ public class NFA {
                         if (s.name.equals(lan)){
                             // search for destination
                             for (int e = 0; e < s.getEdges(); e++) {
-                                if (((Edge) (s.edges.get(e))).value.equals(alpha)) {
+                                if (s.edges.get(e).value.equals(alpha)) {
                                     // add next states to accessible states
-                                    accessible.add(((Edge) s.edges.get(e)).otherSideOfEdge);
+                                    accessible.add(s.edges.get(e).otherSideOfEdge);
                                     // check if there is landa edge in this node or not
-                                    if (haveLandaEdge(((Edge) s.edges.get(e)).otherSideOfEdge)){
-                                        System.out.println(" there is landa edge    "+((Edge) s.edges.get(e)).otherSideOfEdge);
-                                        seenAlpha.add(((Edge) s.edges.get(e)).otherSideOfEdge);
+                                    if (haveLandaEdge( s.edges.get(e).otherSideOfEdge)){
+                                        System.out.println(" there is landa edge    "+s.edges.get(e).otherSideOfEdge);
+                                        seenAlpha.add(s.edges.get(e).otherSideOfEdge);
                                     }
-//                                    System.out.println("the founded state from "+s.name+ " is "+((Edge) s.edges.get(e)).otherSideOfEdge);
-//                                    landaStates.remove(lan);
-//                                    delete = true;
                                 } else if (((Edge) (s.edges.get(e))).value.equals("λ")) {
                                     // we can move with landa
                                     // we can have thousands of landa after each other!
-                                    temp.add(((Edge) s.edges.get(e)).otherSideOfEdge);
+                                    temp.add(s.edges.get(e).otherSideOfEdge);
                                 }
                             }
                         }
@@ -192,10 +189,10 @@ public class NFA {
                     for(State s : states){
                         if (s.name.equals(al)){
                             for (int e = 0; e < s.getEdges(); e++) {
-                                if (((Edge) (s.edges.get(e))).value.equals("λ")) {
-                                    if (haveLandaEdge(((Edge) s.edges.get(e)).otherSideOfEdge))
-                                        temp2.add(((Edge) s.edges.get(e)).otherSideOfEdge);
-                                    accessible.add(((Edge) s.edges.get(e)).otherSideOfEdge);
+                                if (s.edges.get(e).value.equals("λ")) {
+                                    if (haveLandaEdge(s.edges.get(e).otherSideOfEdge))
+                                        temp2.add(s.edges.get(e).otherSideOfEdge);
+                                    accessible.add(s.edges.get(e).otherSideOfEdge);
                                 }
                             }
                         }
@@ -255,7 +252,7 @@ public class NFA {
 
         //part 4: if our NFA accept the landa then the first state must be final state
         for (int i=0;i<n2dStart.edges.size();i++){
-            Edge temp = (Edge) n2dStart.edges.get(i);
+            Edge temp = n2dStart.edges.get(i);
             if (temp.otherSideOfEdge.equals(temp.value) && temp.value.equals("λ")){
                 n2d_final_states.add(n2dStart.name);
                 break;
@@ -297,9 +294,8 @@ public class NFA {
         for (State st: states){
             if (st.name.equals(otherSideOfEdge)){
                 // check if there is landa in edges or not
-                for (Object ed : st.edges){
-                    ed = (Edge)ed;
-                    if (((Edge) ed).value.equals("λ")){
+                for (Edge ed : st.edges){
+                    if (ed.value.equals("λ")){
                         return true;
                     }
                 }
