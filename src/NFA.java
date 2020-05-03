@@ -125,7 +125,10 @@ public class NFA {
             HashSet<String> accessible = new HashSet<String>();
 
             // save the accessible states with landa value and search in them recursively
-            ArrayList<String> landaStates = new ArrayList<>();
+            ArrayList<String> landaStates = new ArrayList<>();     // save states that have landa edge and not seen alpha
+            ArrayList<String> seenAlpha = new ArrayList<>();     // save states that have landa edge but seen the alpha
+            ArrayList<String> temp = new ArrayList<>();         // save temprory edges from landa states
+            ArrayList<String> temp2 = new ArrayList<>();         // save temprory edges from landa states
 
             //search in each name of states names
             for (int i=0;i<names.length;i++){
@@ -139,10 +142,10 @@ public class NFA {
                                 // add next states to accessible states
                                 accessible.add(((Edge) states.get(j).edges.get(e)).otherSideOfEdge);
                                 // check if the othersideofEdge have landa edge it should added to the landaState
-//                                if (haveLandaEdge(((Edge) states.get(j).edges.get(e)).otherSideOfEdge)){
-////                                    System.out.println("there is landa edge in : "+((Edge) states.get(j).edges.get(e)).otherSideOfEdge);
-//                                    landaStates.add(((Edge) states.get(j).edges.get(e)).otherSideOfEdge);
-//                                }
+                                if (haveLandaEdge(((Edge) states.get(j).edges.get(e)).otherSideOfEdge)){
+//                                    System.out.println("there is landa edge in : "+((Edge) states.get(j).edges.get(e)).otherSideOfEdge);
+                                    seenAlpha.add(((Edge) states.get(j).edges.get(e)).otherSideOfEdge);
+                                }
                                 System.out.println("from alpha is : "+((Edge) states.get(j).edges.get(e)).otherSideOfEdge);
 
                             } else if (((Edge) (states.get(j).edges.get(e))).value.equals("λ")) {
@@ -156,10 +159,7 @@ public class NFA {
                     }
                 }
             }
-            //search recursively in the landaStates and add them to the accessible list
-            ArrayList<String> temp = new ArrayList<>();
             boolean finished = false;
-//            boolean delete = false;
             while(!finished){
                 for (String lan : landaStates){
                     for(State s : states){
@@ -170,10 +170,10 @@ public class NFA {
                                     // add next states to accessible states
                                     accessible.add(((Edge) s.edges.get(e)).otherSideOfEdge);
                                     // check if there is landa edge in this node or not
-//                                    if (haveLandaEdge(((Edge) s.edges.get(e)).otherSideOfEdge)){
-//                                        System.out.println(" there is landa edge    "+((Edge) s.edges.get(e)).otherSideOfEdge);
-//                                        temp.add(((Edge) s.edges.get(e)).otherSideOfEdge);
-//                                    }
+                                    if (haveLandaEdge(((Edge) s.edges.get(e)).otherSideOfEdge)){
+                                        System.out.println(" there is landa edge    "+((Edge) s.edges.get(e)).otherSideOfEdge);
+                                        seenAlpha.add(((Edge) s.edges.get(e)).otherSideOfEdge);
+                                    }
 //                                    System.out.println("the founded state from "+s.name+ " is "+((Edge) s.edges.get(e)).otherSideOfEdge);
 //                                    landaStates.remove(lan);
 //                                    delete = true;
@@ -183,20 +183,34 @@ public class NFA {
                                     temp.add(((Edge) s.edges.get(e)).otherSideOfEdge);
                                 }
                             }
-                            //if there is still lan in landaState, removes that
-//                            if (delete){
-//                                landaStates.remove(lan);
-//                                delete = false;
-//                            }
+                        }
+                    }
+                }
+
+                //search in ( seenAlpha and have landa edge )for landa edges recursively
+                for (String al: seenAlpha){
+                    for(State s : states){
+                        if (s.name.equals(al)){
+                            for (int e = 0; e < s.getEdges(); e++) {
+                                if (((Edge) (s.edges.get(e))).value.equals("λ")) {
+                                    if (haveLandaEdge(((Edge) s.edges.get(e)).otherSideOfEdge))
+                                        temp2.add(((Edge) s.edges.get(e)).otherSideOfEdge);
+                                    accessible.add(((Edge) s.edges.get(e)).otherSideOfEdge);
+                                }
+                            }
                         }
                     }
                 }
                 // add temp data to the landaState array
                 landaStates = temp;
+                seenAlpha = temp2;
+                temp2 = new ArrayList<>();
                 temp = new ArrayList<>();
-                if (landaStates.size()==0)
+                if (landaStates.size()==0 && seenAlpha.size()==0)
                     finished = true;
             }
+
+
 
             // part 2c: now the accessible states are founded...
             //          1-add them together and remove the repetitive state
