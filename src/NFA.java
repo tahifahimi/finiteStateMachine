@@ -262,32 +262,33 @@ public class NFA {
             }
         }
 
-//        drawNFA(n2dStates, alphabet);
-//        //write data into a file
-//        try (PrintWriter out = new PrintWriter(fileName)) {
-//            for (String alpha : alphabet )
-//                System.out.printf("%s ",alpha);
-//            System.out.println();
-//
-//            for (State s:  n2dStates)
-//                System.out.printf("%s ",s.name);
-//            System.out.println();
-//
-//            System.out.printf("%s\n",n2dStart.name);
-//
-//            for (String s:  n2d_final_states)
-//                System.out.printf("%s ",s);
-//            System.out.println();
-//
-//            for (State s:  n2dStates){
-//                for (Object e: s.edges)
-//                System.out.printf("%s  %s %s\n",s.name,((Edge)e).value,((Edge)e).otherSideOfEdge);
-//            }
-//
-//            out.println();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
+        // save in file
+        saveDataToFile(alphabet,n2dStart,n2d_final_states,n2dStates,fileName);
+
+    }
+
+    private void saveDataToFile(ArrayList<String> alphabet,State start, ArrayList<String> n2d_final_states, ArrayList<State> n2dStates,String fileName) {
+        try (FileWriter writer = new FileWriter(fileName);
+             BufferedWriter bw = new BufferedWriter(writer)) {
+
+            for (String alpha : alphabet)
+                bw.write(alpha+" ");
+            bw.write("\n");
+
+            bw.write(start.name+"\n");
+
+            for (String finalStates : n2d_final_states)
+                bw.write(finalStates+" ");
+            bw.write("\n");
+
+            for (State s : n2dStates)
+                for (Object e: s.edges)
+                    bw.write(s.name+" "+((Edge)e).value + " "+((Edge)e).otherSideOfEdge+"\n");
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //check if the otherside have the landa edge return true
