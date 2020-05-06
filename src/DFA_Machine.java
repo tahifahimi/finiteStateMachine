@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class DFA_Machine {
-    private ArrayList alphabet = new ArrayList<String>();
-    private ArrayList states = new ArrayList<State>();
-    private ArrayList final_states = new ArrayList<String>();
+    private ArrayList<String> alphabet = new ArrayList<>();
+    private ArrayList<State> states = new ArrayList<>();
+    private ArrayList<String> final_states = new ArrayList<>();
     private State start_state ;
 
     //read the file and generate the states and edges
@@ -34,7 +34,7 @@ public class DFA_Machine {
         //assign the start state
         st = br.readLine();
         for(int i=0;i<states.size();i++){
-            State current = (State) states.get(i);
+            State current = states.get(i);
             if(current.name.equals(st)){
                 //find the start state
                 start_state = current;
@@ -45,7 +45,7 @@ public class DFA_Machine {
         st = br.readLine();
         String[] f = st.split(" ");
         for(int i=0;i<states.size();i++){
-            State current = (State) states.get(i);
+            State current = states.get(i);
             for(int j=0;j<f.length;j++){
                 if(current.name.equals(f[j])){
                     //find the start state
@@ -59,22 +59,16 @@ public class DFA_Machine {
             String[] v = st.split(" ");
             // find the v[0] state and add the edge
             for(int i=0;i<states.size();i++){
-                if (((State)states.get(i)).name.equals(v[0])){
-                    ((State) states.get(i)).addEdge(v[1],v[2]);
+                if (states.get(i).name.equals(v[0])){
+                    states.get(i).addEdge(v[1],v[2]);
                     break;
                 }
             }
         }
-        drawTheDFA();
 
         }catch(Exception e) {
             e.printStackTrace();
         }
-    }
-
-    //print the DFA (states and edges)
-    private void drawTheDFA() {
-        System.out.println("the machine works fine");
     }
 
     //check the entered statements
@@ -82,7 +76,7 @@ public class DFA_Machine {
         System.out.println("enter the statement");
         Scanner scanner = new Scanner(System.in);
         String order = scanner.nextLine();
-        while (order!="\n"){
+        while (!order.equals("exit")){
             //check the letters of the order
             if(checkTheLetters(order)){
                 //now check that order is acceptable in our DFA or not!
@@ -105,8 +99,8 @@ public class DFA_Machine {
             if (nextState!=""){
                 // find the next state and assign it to current state
                 for (int k=0;k<states.size();k++){
-                    if (nextState.equals(((State)states.get(k)).name) ){
-                        current = (State) states.get(k);
+                    if (nextState.equals(states.get(k).name) ){
+                        current = states.get(k);
                         System.out.println("the current state changes to "+current.name);
                         break;
                     }
@@ -136,6 +130,8 @@ public class DFA_Machine {
 
     // check if the letters of the input string is in our alphabets or not!
     private boolean checkTheLetters(String statement){
+        if (statement == "\n")
+            return false;
         String[] alpha = statement.split("(?!^)");
 //        for (int m =0;m<alpha.length;m++){
 //            System.out.println(alpha[m]);
