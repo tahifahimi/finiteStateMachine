@@ -107,8 +107,8 @@ public class DFA_Machine {
                 }
             }else {
                 // no next state is found!
-                ///Do sth!??????????????????????????
                 System.out.println("the next state is not founded!");
+                return;
             }
         }
         //check current state is in the final state or not!
@@ -130,12 +130,7 @@ public class DFA_Machine {
 
     // check if the letters of the input string is in our alphabets or not!
     private boolean checkTheLetters(String statement){
-        if (statement == "\n")
-            return false;
         String[] alpha = statement.split("(?!^)");
-//        for (int m =0;m<alpha.length;m++){
-//            System.out.println(alpha[m]);
-//        }
         boolean flag ;
         for (int i=0;i<alpha.length;i++){
             flag =false;

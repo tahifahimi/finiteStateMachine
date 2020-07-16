@@ -124,7 +124,6 @@ public class NFA {
             String names[] = n2dStates.get(index).name.split(",");
             HashSet<String> accessible = new HashSet<String>();
 
-            // save the accessible states with landa value and search in them recursively
             ArrayList<String> landaStates = new ArrayList<>();     // save states that have landa edge and not seen alpha
             ArrayList<String> seenAlpha = new ArrayList<>();     // save states that have landa edge but seen the alpha
             ArrayList<String> temp = new ArrayList<>();         // save temprory edges from landa states
@@ -143,7 +142,6 @@ public class NFA {
                                 accessible.add( states.get(j).edges.get(e).otherSideOfEdge);
                                 // check if the othersideofEdge have landa edge it should added to the landaState
                                 if (haveLandaEdge(states.get(j).edges.get(e).otherSideOfEdge)){
-//                                    System.out.println("there is landa edge in : "+((Edge) states.get(j).edges.get(e)).otherSideOfEdge);
                                     seenAlpha.add(states.get(j).edges.get(e).otherSideOfEdge);
                                 }
                                 System.out.println("from alpha is : "+states.get(j).edges.get(e).otherSideOfEdge);
@@ -152,8 +150,6 @@ public class NFA {
                                 // we can move with landa
                                 // we can have thousands of landa after each other!
                                 landaStates.add(states.get(j).edges.get(e).otherSideOfEdge);
-                                System.out.println("from landa is : "+states.get(j).edges.get(e).otherSideOfEdge);
-
                             }
                         }
                     }
@@ -174,7 +170,7 @@ public class NFA {
                                         System.out.println(" there is landa edge    "+s.edges.get(e).otherSideOfEdge);
                                         seenAlpha.add(s.edges.get(e).otherSideOfEdge);
                                     }
-                                } else if (((Edge) (s.edges.get(e))).value.equals("λ")) {
+                                } else if ((s.edges.get(e)).value.equals("λ")) {
                                     // we can move with landa
                                     // we can have thousands of landa after each other!
                                     temp.add(s.edges.get(e).otherSideOfEdge);
